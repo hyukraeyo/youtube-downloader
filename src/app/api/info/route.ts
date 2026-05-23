@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
       filesize_approx?: number;
       mimeType?: string;
       height?: number;
+      width?: number;
     }
 
     const rawFormats: YtDlpFormat[] = info.formats || [];
@@ -89,7 +90,11 @@ export async function POST(request: NextRequest) {
 
       const bestVideo = sortedVideos[0];
       const hasAudio = bestVideo.acodec && bestVideo.acodec !== 'none';
-      const height = bestVideo.height || 720;
+      // For vertical videos (Shorts: 1080x1920), height > width.
+      // Use Math.min to always show the correct resolution class (e.g. 1080p, not 1920p).
+      const rawHeight = bestVideo.height || 720;
+      const rawWidth = bestVideo.width || rawHeight;
+      const height = Math.min(rawHeight, rawWidth);
       
       // Label the video format clearly as 'Original High Quality'
       const qualityLabel = `${height}p (고화질 원본)`;
