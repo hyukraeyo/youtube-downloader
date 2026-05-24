@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const ytdl = require('@distube/ytdl-core');
+
 
 async function test() {
   const url = 'https://www.youtube.com/watch?v=mNEUkkoUoIA';

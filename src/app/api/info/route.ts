@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { execFile } from 'child_process';
 import path from 'path';
-import promisify from 'util';
+import { promisify } from 'util';
 
-const execFilePromise = promisify.promisify(execFile);
+const execFilePromise = promisify(execFile);
 
 // 유튜브 비디오 ID 추출 헬퍼 함수 (일반, 단축, 쇼츠, 임베드 주소 모두 완벽 지원)
 function getYoutubeVideoId(url: string): string {
@@ -68,7 +68,19 @@ export async function POST(request: NextRequest) {
     const videoOnlyOrMerged = rawFormats.filter(f => f.vcodec && f.vcodec !== 'none');
     const audioOnly = rawFormats.filter(f => f.acodec && f.acodec !== 'none' && (!f.vcodec || f.vcodec === 'none'));
 
-    const processedFormats: any[] = [];
+    interface ProcessedFormat {
+      itag: number;
+      formatId: string;
+      quality: string;
+      container: string;
+      hasVideo: boolean;
+      hasAudio: boolean;
+      fps: number;
+      contentLength: string;
+      mimeType: string;
+    }
+
+    const processedFormats: ProcessedFormat[] = [];
 
     // 1. Select the SINGLE BEST Video Format
     if (videoOnlyOrMerged.length > 0) {
@@ -96,8 +108,8 @@ export async function POST(request: NextRequest) {
       const rawWidth = bestVideo.width || rawHeight;
       const height = Math.min(rawHeight, rawWidth);
       
-      // Label the video format clearly as 'Original High Quality'
-      const qualityLabel = `${height}p (고화질 원본)`;
+      // Label the video format simply as raw height
+      const qualityLabel = `${height}p`;
 
       const parsedItag = parseInt(bestVideo.format_id, 10) || Math.abs(bestVideo.format_id.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a; }, 0));
       const sizeBytes = bestVideo.filesize || bestVideo.filesize_approx || 0;
@@ -147,10 +159,11 @@ export async function POST(request: NextRequest) {
       videoDetails,
       formats: sortedFormats,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Info fetching error via yt-dlp:', error);
+    const errorMessage = error instanceof Error ? error.message : '';
     return NextResponse.json(
-      { error: '유튜브 비디오 정보를 추출하는데 실패했습니다. 주소가 유효한지 다시 확인해주세요. 에러: ' + (error.message || '') },
+      { error: '유튜브 비디오 정보를 추출하는데 실패했습니다. 주소가 유효한지 다시 확인해주세요. 에러: ' + errorMessage },
       { status: 500 }
     );
   }

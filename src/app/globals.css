@@ -1,9 +1,13 @@
 @import "tailwindcss";
 
-/* 
-  Premium Gmarket Sans Font Definition (Free Font)
-  Loads Light(300), Medium(500), Bold(700) weights smoothly via fastly jsdelivr CDN
-*/
+/* 폰트 시스템 구축: 대기업/브랜드 웹폰트 주입 */
+@font-face {
+  font-family: 'Jalnan';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/Jalnan.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @font-face {
   font-family: 'GmarketSans';
   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
@@ -23,17 +27,100 @@
   font-style: normal;
 }
 
+/* 프리텐다드체 (Pretendard) */
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* 샌드박스 어그로체 (SBAggro) */
+@font-face {
+  font-family: 'SBAggro';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroM.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'SBAggro';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* 당근체 대체 둥글동글 폰트 (CookieRun) */
+@font-face {
+  font-family: 'CookieRun';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/CookieRun-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 배민 도현체 (DoHyeon) */
+@font-face {
+  font-family: 'DoHyeon';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/dohyeon.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --primary: #FBC02D;
+  /* 라이트모드 (CutTube AI 시안 룩앤필) */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --primary: #0056e0;
+  --primary-hover: #0046b8;
+  --primary-light: #e6f0ff;
+  --card: #ffffff;
+  --card-border: #e2e8f0;
+  --text-muted: #64748b;
+  --accent: #f1f5f9;
+  --shadow-premium: 0 10px 30px -10px rgba(0, 86, 224, 0.08), 0 1px 3px -1px rgba(0, 0, 0, 0.02);
+  --shadow-glow: 0 0 20px rgba(0, 86, 224, 0.15);
+
+  /* 전역 서체 정의 (브라우저가 var()를 통해 직접 인지할 수 있도록 주입) */
+  --font-sans: 'Pretendard', var(--font-inter), var(--font-noto-sans-kr), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-title: 'GmarketSans', sans-serif;
+}
+
+.dark {
+  /* 다크모드 (초프리미엄 딥 블랙/블루 스페이스 룩앤필) */
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-light: #1e293b;
+  --card: #18181b;
+  --card-border: #27272a;
+  --text-muted: #a1a1aa;
+  --accent: #27272a;
+  --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 1px 3px -1px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
-  --font-sans: 'GmarketSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--color-primary-light);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  
+  --shadow-premium: var(--shadow-premium);
+  --shadow-glow: var(--shadow-glow);
+  
+  --font-sans: var(--font-sans);
+  --font-title: var(--font-title);
   --font-size-xs: 0.875rem;
 }
 
@@ -42,16 +129,38 @@ html {
 }
 
 body {
-  background-color: #050505;
-  color: #ededed;
-  font-family: 'GmarketSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans) !important;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.025em; /* 한글 최적화 프리미엄 마이너스 자간 */
 }
 
-/* Force Gmarket Sans exclusively across all elements and form controls */
-input, button, textarea, select, span, p, h1, h2, h3, h4, h5, h6, a {
-  font-family: 'GmarketSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+/* 글로벌 폰트 통일로 가독성 및 정렬 결함 전면 차단 (일반 본문은 Pretendard 당근 폰트) */
+input, button, textarea, select, span, p, a, div, li {
+  font-family: var(--font-sans) !important;
+}
+
+/* 완전 큰 제목 폰트는 지마켓 폰트(GmarketSans) 사용 허용 */
+h1, h2, h3, .font-title {
+  font-family: var(--font-title) !important;
+}
+
+/* h4, h5, h6 등 비교적 작은 헤드라인은 본문 폰트(Pretendard)로 단정하게 적용 */
+h4, h5, h6 {
+  font-family: var(--font-sans) !important;
+}
+
+/* 글로벌하게 클릭 가능한 요소에 포인터 커서 적용 */
+a, button, [role="button"], input[type="button"], input[type="submit"], input[type="reset"] {
+  cursor: pointer !important;
+}
+
+/* 비활성화된 요소는 커서 금지 및 포인터 방지 */
+button:disabled, input:disabled, select:disabled, textarea:disabled, [aria-disabled="true"] {
+  cursor: not-allowed !important;
 }
 
 /* Custom premium scrollbar styling */
@@ -60,25 +169,56 @@ input, button, textarea, select, span, p, h1, h2, h3, h4, h5, h6, a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d0d0d;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #262626;
+  background: var(--card-border);
   border-radius: 9999px;
-  border: 2px solid #0d0d0d;
+  border: 2px solid var(--background);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #FBC02D;
+  background: var(--primary);
 }
 
 /* Glassmorphism input focus animation effect */
-.focus-neon-yellow {
+.focus-neon-blue {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.focus-neon-yellow:focus {
+.focus-neon-blue:focus {
   outline: none;
-  border-color: #FBC02D;
-  box-shadow: 0 0 20px rgba(251, 192, 45, 0.15);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-glow);
 }
+
+/* 개별 브랜드 폰트 강제 적용 유틸리티 클래스 (글로벌 !important 통일성 우회) */
+.font-cookierun {
+  font-family: 'CookieRun', sans-serif !important;
+}
+.font-gmarketsans {
+  font-family: 'GmarketSans', sans-serif !important;
+}
+.font-pretendard {
+  font-family: 'Pretendard', sans-serif !important;
+}
+.font-jalnan {
+  font-family: 'Jalnan', sans-serif !important;
+}
+.font-sbaggro {
+  font-family: 'SBAggro', sans-serif !important;
+}
+.font-dohyeon {
+  font-family: 'DoHyeon', sans-serif !important;
+}
+
+/* 프로젝트 전체 폰트 가독성 극대화: 최소 폰트 크기를 14px(0.875rem) 이상으로 보장 */
+.text-xs, 
+.text-\[10px\], 
+.text-\[11px\], 
+.text-\[12px\], 
+.text-\[13px\] {
+  font-size: 0.875rem !important; /* 브라우저 렌더링 기준 최소 14px 강제 고정 */
+}
+
+
